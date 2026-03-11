@@ -21,24 +21,46 @@ Tratamiento de clases desbalanceadas: imbalanced-learn (SMOTE, RandomUnderSample
 Análisis Exploratorio de Datos (EDA)
 Se realizó un análisis bivariado para examinar visualmente la relación entre diferentes características de los clientes y su probabilidad de cancelar el servicio, lo que permitió identificar patrones relevantes en los datos.
 
-Preprocesamiento de Datos
+## Datos
+El dataset incluye información de clientes, como:
+- Antigüedad y tipo de contrato.
+- Servicios contratados (Internet, Telefonía, etc.).
+- Método de pago y cargos mensuales.
+- Variables categóricas y numéricas relevantes para el análisis.
 
-Transformación de variables categóricas mediante One-Hot Encoding.
+Se aplicó **preprocesamiento**, incluyendo limpieza de datos, creación de variables dummy y balanceo de la clase minoritaria usando **SMOTE + RandomUnderSampler**.
 
-Normalización de variables numéricas utilizando StandardScaler.
+---
 
-Manejo del Desbalanceo de Clases (Pipeline Híbrido)
-Para evitar problemas de data leakage, se implementó un pipeline estructurado que combina dos técnicas:
+## Modelos Utilizados
+1. **Random Forest**
+   - Modelo principal por su equilibrio entre Recall y Precisión.
+   - Maneja variables categóricas y continuas, y es robusto ante ruido.
 
-SMOTE, para generar ejemplos sintéticos de la clase minoritaria.
+2. **K-Nearest Neighbors (KNN)**
+   - Buen Recall, pero baja Precisión, menos práctico para campañas costosas.
 
-RandomUnderSampler, para reducir el número de observaciones de la clase mayoritaria.
+**Optimización de Hiperparámetros:**  
+- Random Forest: `n_estimators`, `max_depth`, `min_samples_split`, `min_samples_leaf`  
+- KNN: `n_neighbors`, `weights`, `p`
 
-Entrenamiento y Optimización de Modelos
-Se entrenaron y compararon dos algoritmos principales:
+## Resultados
+- **Random Forest** obtuvo el mejor desempeño general (F1-score y AUC más altos).  
+- **Factores clave de cancelación**:
+  - Contrato y antigüedad
+  - Servicio de fibra óptica
+  - Método de pago (Electronic check)
+  - Sensibilidad al precio (Cargo total y mensual)
 
-K-Nearest Neighbors (KNN), basado en distancia entre observaciones.
+- **Visualizaciones incluidas**:
+  - Curvas ROC con AUC
+  - Gráficos de importancia de variables (Random Forest y KNN, con paleta `coolwarm`)
 
-Random Forest, un modelo de ensamble basado en árboles de decisión.
+---
 
-Los hiperparámetros se optimizaron mediante GridSearchCV, utilizando Recall como métrica principal para priorizar la detección de clientes en riesgo de abandono.
+## Estrategias de Retención Propuestas
+- Incentivar la migración a contratos de 1 o 2 años para clientes “Mes a mes” con más de 3 meses de antigüedad.
+- Auditoría y mejora del servicio de fibra óptica, revisando caídas de red, velocidad y satisfacción de usuarios.
+- Fomentar la domiciliación de pagos para reducir fricción y minimizar la probabilidad de cancelación.
+- Gestionar los primeros 90 días de los nuevos clientes con llamadas de bienvenida, tutoriales y soporte prioritario.
+
